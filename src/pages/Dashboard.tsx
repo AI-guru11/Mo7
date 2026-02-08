@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { GlassCard } from '../components/GlassCard'
+import { CustomerRadar } from '../components/CustomerRadar'
 import { getDashboardStats, getDemoStats } from '../lib/api'
 import { formatCurrency } from '../lib/utils'
 import type { DashboardStats } from '../lib/types'
@@ -394,6 +395,19 @@ export function Dashboard() {
           </GlassCard>
         </motion.div>
       </div>
+
+      {/* Customer Intelligence Radar */}
+      <motion.div
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 1.0 }}
+        className="mt-8"
+      >
+        <h2 className="text-2xl font-bold mb-4 bg-neon-gradient bg-clip-text text-transparent">
+          Customer Intelligence Radar
+        </h2>
+        <CustomerRadar />
+      </motion.div>
     </div>
   )
 }
