@@ -58,4 +58,9 @@ export default defineConfig({
     })
   ],
   base: '/Mo7/',
+  server: {
+    host: true,
+    port: 5173,
+    strictPort: true,
+  },
 })
