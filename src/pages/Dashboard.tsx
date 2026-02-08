@@ -40,17 +40,33 @@ export function Dashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [isDemoMode, setIsDemoMode] = useState(false)
+  const [isZeroState, setIsZeroState] = useState(false)
 
   useEffect(() => {
     async function loadStats() {
       try {
         const data = await getDashboardStats()
-        setStats(data)
-        setIsDemoMode(false)
+
+        // Check if we got real data (even if it's zero/empty)
+        if (data) {
+          setStats(data)
+          setIsDemoMode(false)
+
+          // Detect zero state (connected but no data yet)
+          const hasNoData = data.totalOrders === 0 && data.totalCustomers === 0
+          setIsZeroState(hasNoData)
+
+          if (hasNoData) {
+            console.log('📊 M7 System: Connected but no data yet - Zero state active')
+          }
+        } else {
+          throw new Error('No data received')
+        }
       } catch (error) {
         console.error('Failed to load stats, using demo mode:', error)
         setStats(getDemoStats())
         setIsDemoMode(true)
+        setIsZeroState(false)
       } finally {
         setLoading(false)
       }
@@ -91,6 +107,25 @@ export function Dashboard() {
               <p className="font-semibold text-yellow-500">Demo Mode Active</p>
               <p className="text-sm text-white/60">
                 Supabase not connected. Add credentials to .env file. Showing static demo data.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Zero State Banner - Connected but no data */}
+      {!isDemoMode && isZeroState && (
+        <motion.div
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="mb-6 p-4 rounded-lg bg-neon-blue/10 border border-neon-blue/30"
+        >
+          <div className="flex items-center gap-3">
+            <Package className="w-5 h-5 text-neon-blue" />
+            <div>
+              <p className="font-semibold text-neon-blue">Fresh Start - Database Connected</p>
+              <p className="text-sm text-white/60">
+                Supabase connected successfully! Run the db_schema.sql to populate with seed data, or start adding customers and orders.
               </p>
             </div>
           </div>

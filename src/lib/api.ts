@@ -11,7 +11,6 @@ import type {
   CreateOrderForm,
   UpdateStockForm,
   CustomerSummary,
-  DailySales,
   ProductPerformance,
 } from './types'
 
@@ -105,7 +104,7 @@ export async function createOrder(form: CreateOrderForm): Promise<Order> {
   // Calculate total amount
   const { data: products } = await supabase
     .from('products')
-    .select('id, price_per_bag, bag_weight_kg')
+    .select('id, price_per_bag, bag_weight_kg, stock_kg')
     .in('id', form.items.map(item => item.product_id))
 
   if (!products) throw new Error('Products not found')
