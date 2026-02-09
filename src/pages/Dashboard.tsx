@@ -56,10 +56,6 @@ export function Dashboard() {
           // Detect zero state (connected but no data yet)
           const hasNoData = data.totalOrders === 0 && data.totalCustomers === 0
           setIsZeroState(hasNoData)
-
-          if (hasNoData) {
-            console.log('📊 M7 System: Connected but no data yet - Zero state active')
-          }
         } else {
           throw new Error('No data received')
         }
